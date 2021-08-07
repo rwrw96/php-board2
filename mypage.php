@@ -22,6 +22,7 @@ $user_id = $user['id'];
 	<p>id：<?php echo htmlspecialchars($user['id'], ENT_QUOTES); ?></p>
 	<p>名前：<?php echo htmlspecialchars($user['name'], ENT_QUOTES); ?></p>
 	<p>メールアドレス：<?php echo htmlspecialchars($user['email'], ENT_QUOTES); ?></p>
+	<p><img src="user_images/<?php echo htmlspecialchars($user['image'], ENT_QUOTES); ?>" alt="写真" width=230 height=200></p>
 
 	<a href="edit.php?id=<?php echo $user_id ?>">編集する</a>
 </body>

@@ -2,30 +2,11 @@
 require('dbconnect.php');
 session_start();
 
-
 $user_id = $_GET['id'];
 
 if ($_SESSION['user']['id'] !== $_GET['id']){
     header("Location: mypage.php?id=$user_id");
 }
-
-if (!empty($_POST)){
-	if (empty($_POST['name'])){
-		$error['name'] = 'blank';
-	}
-	if (empty($_POST['email'])){
-		$error['email'] = 'blank';
-	}
-	if ($_POST['email'] === $exist_user['email']){
-		$error['email'] = 'already';
-	}
-
-	if (empty($error)){
-		header("Location: edit_do.php?id=$user_id");
-		exit();
-	}
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -37,20 +18,14 @@ if (!empty($_POST)){
     <title>Document</title>
 </head>
 <body>
-  <form action="edit_do.php?id=<?php echo $user_id ?>" method=post>
+
+  <form action="edit_do.php?id=<?php echo $user_id; ?>" method="post" enctype="multipart/form-data">
 	<p><label for="name">名前</label></p>
-		<?php if ($error['name'] === 'blank'): ?>
-			<h4>名前を入力してください</h4>
-		<?php endif; ?>
 		<input type="text" name="name" id="name" value="<?php echo $_SESSION['user']['name']; ?>">
 		<p><label for="email">メールアドレス</label></p>
-		<?php if ($error['email'] === 'blank'): ?>
-			<h4>メールアドレスを入力してください</h4>
-		<?php endif; ?>
-		<?php if ($error['email'] === 'already'): ?>
-			<h4>そのメールアドレスは既に使用されています</h4>
-		<?php endif; ?>
 		<input type="text" name="email" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
+		<p><label for="image">画像</label></p>
+		<input type="file" name="image" id="image">
 		<button type="submit">編集する</button>
 	</form>
 </body>
