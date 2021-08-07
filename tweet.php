@@ -8,6 +8,11 @@ $stmt = $db -> prepare('SELECT * FROM tweets WHERE id=?');
 $stmt -> execute(array($tweet_id));
 $tweet = $stmt -> fetch();
 
+$replys = $db -> prepare('SELECT * FROM tweets WHERE reply_id=?');
+$replys -> execute(array($tweet_id));
+
+
+var_dump($tweet);
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +27,11 @@ $tweet = $stmt -> fetch();
 	<h2>投稿詳細</h2>
 	<p>投稿文：<?php echo $tweet['content']; ?></p>
 	<p>日時：<?php echo $tweet['created_at']; ?></p>
+	<?php if (!empty($replys)): ?>
+		<?php foreach ($replys as $reply): ?>
+			<p>返信：<?php echo $reply['content']; ?></p>
+		<?php endforeach; ?>
+	<?php endif; ?>
 	<?php if($tweet['user_id'] == $_SESSION['user']['id']): ?>
 		<a href="tweet_edit.php?id=<?php echo $tweet_id; ?>">編集</a>
 		<a href="delete.php?id=<?php echo $tweet_id; ?>">削除</a>
