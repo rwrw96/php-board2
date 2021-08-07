@@ -7,10 +7,14 @@ $user = $_SESSION['user'];
 $tweets = $db -> prepare('SELECT * FROM tweets, users WHERE users.id=tweets.user_id');
 $tweets -> execute();
 
+$stmt = $db -> prepare('SELECT * FROM tweets WHERE id=?');
+$stmt -> execute(array($_GET['reply']));
+$reply = $stmt -> fetch();
+
 if (isset($user)){
 	if (!empty($_POST['content'])){
-		$stmt = $db -> prepare('INSERT INTO tweets SET content=?, user_id=?, created_at=NOW()');
-		$stmt -> execute(array($_POST['content'], $user['id']));
+		$stmt = $db -> prepare('INSERT INTO tweets SET content=?, user_id=?,reply_id=?, created_at=NOW()');
+		$stmt -> execute(array($_POST['content'], $user['id'], $reply['id']));
 		
 		header('Location: index.php');
 		exit();
@@ -37,7 +41,7 @@ if (isset($user)){
   <h2>投稿一覧</h2>
 		<form action="" method="post">
 			<p><label for="content">投稿</label></p>
-			<input type="text" name="content" id="content">
+			<input type="text" name="content" id="content" value="<?php echo $reply['content']; ?>">
 			<button type="submit">投稿する</button>
 		</form>
 
@@ -46,6 +50,7 @@ if (isset($user)){
 			<p>投稿者：<a href="mypage.php?id=<?php echo $tweet['user_id']; ?>"><?php echo htmlspecialchars($tweet['name'], ENT_QUOTES); ?></a></p>
 			<p>投稿：<a href="tweet.php?id=<?php echo $tweet[0]; ?>"><?php echo htmlspecialchars($tweet['content'], ENT_QUOTES); ?></a></p>
 			<p>日時：<?php echo htmlspecialchars($tweet['created_at'], ENT_QUOTES); ?></p>
+			<p><a href="index.php?reply=<?php echo $tweet[0]; ?>">返信する</a></p>
 		<?php endforeach; ?>
 </body>
 </html>
