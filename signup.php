@@ -74,5 +74,7 @@ if (!empty($_POST)){
 		<input type="text" name="password" id="password">
 		<button type="submit">登録する</button>
 	</form>
+
+	<a href="login.php">ログインはこちら</a>
 </body>
 </html>
